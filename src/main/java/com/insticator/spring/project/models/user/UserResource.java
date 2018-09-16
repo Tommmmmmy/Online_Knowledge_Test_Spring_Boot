@@ -21,11 +21,16 @@ import com.insticator.spring.project.models.questions.QuestionNotFoundException;
 import com.insticator.spring.project.models.questions.Checkbox.Checkans;
 import com.insticator.spring.project.models.questions.Checkbox.CheckansId;
 import com.insticator.spring.project.models.questions.Checkbox.Checkbox;
+import com.insticator.spring.project.models.questions.Poll.Poll;
+import com.insticator.spring.project.models.questions.Poll.Pollans;
+import com.insticator.spring.project.models.questions.Poll.PollansId;
 import com.insticator.spring.project.models.questions.Trivia.Trivia;
 import com.insticator.spring.project.models.questions.Trivia.Triviaans;
 import com.insticator.spring.project.models.questions.Trivia.TriviaansId;
 import com.insticator.spring.project.repository.CheckansRepository;
 import com.insticator.spring.project.repository.CheckboxRepository;
+import com.insticator.spring.project.repository.PollRepository;
+import com.insticator.spring.project.repository.PollansRepository;
 import com.insticator.spring.project.repository.TriviaRepository;
 import com.insticator.spring.project.repository.TriviaansRepository;
 import com.insticator.spring.project.repository.UserRepository;
@@ -47,6 +52,12 @@ public class UserResource {
 	
 	@Autowired
 	private TriviaansRepository triviaansService;
+	
+	@Autowired
+	private PollRepository pollService;
+	
+	@Autowired
+	private PollansRepository pollansService;
 	
 	@GetMapping("/users")
 	public List<User> retrieveAllUsers() {
@@ -142,7 +153,7 @@ public class UserResource {
 	
 	//mapping for trivias
 	@PostMapping("/users/{uId}/trivias/{qId}")
-	public void saveTriviaAnswers(@Valid @RequestBody Map<String, String> trivaans, @PathVariable int uId, @PathVariable int qId) {
+	public String saveTriviaAnswers(@Valid @RequestBody Map<String, String> trivaans, @PathVariable int uId, @PathVariable int qId) {
 		
 		Optional<User> userOptional = service.findById(uId);
 
@@ -153,17 +164,24 @@ public class UserResource {
 		List<Trivia> trivias = triviaService.findByUUserAndId(userOptional.get(), qId);
 		
 		if (trivias.size() == 0) {
-			throw new QuestionNotFoundException("UserId: " + uId + "CheckId: " + qId);
+			throw new QuestionNotFoundException("UserId: " + uId + "TriviaId: " + qId);
 		}
 		
 		Trivia trivia = trivias.iterator().next();
 		
-		String correctAnswer= trivaans.get("answers"); 
+		String userAnswer= trivaans.get("answers"); 
 		
 		TriviaansId id = new TriviaansId(uId, qId);
 		
-		Triviaans answer = new Triviaans(id, trivia, userOptional.get(), correctAnswer);
+		Triviaans answer = new Triviaans(id, trivia, userOptional.get(), userAnswer);
 		triviaansService.save(answer);
+		
+		if(trivia.getCorrectAns().equals(userAnswer)) {
+			return "Correct Answer!";
+		}
+		else {
+			return "Wrong Answer!";
+		}
 	}
 	
 	@GetMapping("/users/{uId}/trivias/{qId}")
@@ -178,7 +196,7 @@ public class UserResource {
 		List<Trivia> trivias = triviaService.findByUUserAndId(userOptional.get(), qId);
 		
 		if (trivias.size() == 0) {
-			throw new QuestionNotFoundException("UserId: " + uId + "CheckId: " + qId);
+			throw new QuestionNotFoundException("UserId: " + uId + "TriviaId: " + qId);
 		}
 		
 		Trivia trivia = trivias.iterator().next();
@@ -212,6 +230,82 @@ public class UserResource {
 		}
 		if(res.size() == 0) {
 			throw new QuestionNotFoundException("No trivia found for UserId: " + uId + " or all were answered");
+		}
+		return res;
+	}
+	
+	//mapping for polls
+	@PostMapping("/users/{uId}/polls/{qId}")
+	public void savePollAnswers(@Valid @RequestBody Map<String, String> pollans, @PathVariable int uId, @PathVariable int qId) {
+		
+		Optional<User> userOptional = service.findById(uId);
+
+		if (!userOptional.isPresent()) {
+			throw new UserNotFoundException("id-"+uId);
+		}
+		
+		List<Poll> polls = pollService.findByUUserAndId(userOptional.get(), qId);
+		
+		if (polls.size() == 0) {
+			throw new QuestionNotFoundException("UserId: " + uId + "PollId: " + qId);
+		}
+		
+		Poll poll = polls.iterator().next();
+		
+		String userAnswer= pollans.get("answers"); 
+		
+		PollansId id = new PollansId(uId, qId);
+		
+		Pollans answer = new Pollans(id, poll, userOptional.get(), userAnswer);
+		pollansService.save(answer);
+	}
+	
+	@GetMapping("/users/{uId}/polls/{qId}")
+	public String savePollAnswers(@PathVariable int uId, @PathVariable int qId) {
+		
+		Optional<User> userOptional = service.findById(uId);
+
+		if (!userOptional.isPresent()) {
+			throw new UserNotFoundException("id-"+uId);
+		}
+		
+		List<Poll> polls = pollService.findByUUserAndId(userOptional.get(), qId);
+		
+		if (polls.size() == 0) {
+			throw new QuestionNotFoundException("UserId: " + uId + "pollId: " + qId);
+		}
+		
+		Poll poll = polls.iterator().next();
+		
+		PollansId id = new PollansId(uId, qId);
+		
+		Optional<Pollans> ans = pollansService.findById(id);
+		if(!ans.isPresent()) {
+			throw new QuestionNotFoundException("No answer found for UserId: " + uId + ", PollId: " + qId);
+		}
+		return ans.get().getAnswer();
+	}
+	
+	@GetMapping("/users/{uId}/polls")
+	public List<String> checkPolls(@PathVariable int uId) {
+		
+		Optional<User> userOptional = service.findById(uId);
+
+		if (!userOptional.isPresent()) {
+			throw new UserNotFoundException("id-"+uId);
+		}
+		
+		Set<Poll> polls = userOptional.get().getpQuestions();
+		List<String> res = new ArrayList<>();
+		for(Poll poll : polls) {
+			PollansId id = new PollansId(uId, poll.getId());
+			Optional<Pollans> ans = pollansService.findById(id);
+			if(!ans.isPresent()) {
+				res.add(poll.getQuestion());
+			}
+		}
+		if(res.size() == 0) {
+			throw new QuestionNotFoundException("No poll found for UserId: " + uId + " or all were answered");
 		}
 		return res;
 	}

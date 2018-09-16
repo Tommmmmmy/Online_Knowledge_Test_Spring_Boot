@@ -32,7 +32,7 @@ public class Pollans {
 	@ElementCollection
     @CollectionTable(name = "user_poll_answers", joinColumns = {@JoinColumn(name = "poll_id"), @JoinColumn(name = "user_id")})
     @Column
-	private String answers;
+	private String answer;
 
 	public PollansId getId() {
 		return id;
@@ -58,19 +58,19 @@ public class Pollans {
 		this.user = user;
 	}
 
-	public String getAnswers() {
-		return answers;
+	public String getAnswer() {
+		return answer;
 	}
 
-	public void setAnswers(String answers) {
-		this.answers = answers;
+	public void setAnswer(String answer) {
+		this.answer = answer;
 	}
 
-	public Pollans(PollansId id, Poll poll, User user, String answers) {
+	public Pollans(PollansId id, Poll poll, User user, String answer) {
 		this.id = id;
 		this.poll = poll;
 		this.user = user;
-		this.answers = answers;
+		this.answer = answer;
 	}
 
 	public Pollans() {
