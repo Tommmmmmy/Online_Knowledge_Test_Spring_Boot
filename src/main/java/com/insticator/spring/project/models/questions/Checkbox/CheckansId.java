@@ -1,4 +1,4 @@
-package com.insticator.spring.project.models.questions;
+package com.insticator.spring.project.models.questions.Checkbox;
 
 import java.io.Serializable;
 

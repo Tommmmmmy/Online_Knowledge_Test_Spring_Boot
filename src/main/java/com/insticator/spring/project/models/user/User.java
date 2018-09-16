@@ -19,10 +19,10 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.insticator.spring.project.models.questions.Checkbox;
-import com.insticator.spring.project.models.questions.Poll;
 import com.insticator.spring.project.models.questions.Question;
-import com.insticator.spring.project.models.questions.Trivia;
+import com.insticator.spring.project.models.questions.Checkbox.Checkbox;
+import com.insticator.spring.project.models.questions.Poll.Poll;
+import com.insticator.spring.project.models.questions.Trivia.Trivia;
 
 @Entity
 @Table(name = "users")

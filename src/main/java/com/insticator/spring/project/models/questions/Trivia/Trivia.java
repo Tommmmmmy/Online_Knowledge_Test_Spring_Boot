@@ -1,9 +1,8 @@
-package com.insticator.spring.project.models.questions;
+package com.insticator.spring.project.models.questions.Trivia;
 
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -11,18 +10,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.insticator.spring.project.models.questions.Question;
 import com.insticator.spring.project.models.user.User;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
 @Entity
-@Table(name = "checkboxs")
-public class Checkbox extends Question{
+@Table(name = "trivias")
+public class Trivia extends Question{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,24 +34,24 @@ public class Checkbox extends Question{
 	private User uUser;
 	
 	@ElementCollection
-    @CollectionTable(name = "checkbox_option", joinColumns = @JoinColumn(name = "checkbox_id"))
+    @CollectionTable(name = "question_option", joinColumns = @JoinColumn(name = "trivia_id"))
     @Column(name = "options")
 	private Set<String> options;
 
-	public Checkbox() {
-		super(3);
+	private String correctAns;
+
+	public Trivia() {
+		super(1);
 		// TODO Auto-generated constructor stub
 	}
-
-	public User getuUser() {
+	
+    public User getuUser() {
 		return uUser;
 	}
 
 	public void setuUser(User uUser) {
 		this.uUser = uUser;
 	}
-
-
 
 	public int getId() {
         return id;
@@ -79,24 +77,20 @@ public class Checkbox extends Question{
 		this.options = options;
 	}
 
-	public Checkbox(String question, User uUser, Set<String> options) {
-		super(3);
+	public String getCorrectAns() {
+		return correctAns;
+	}
+
+	public void setCorrectAns(String correctAns) {
+		this.correctAns = correctAns;
+	}
+
+	public Trivia(String question, User uUser, Set<String> options, String correctAns) {
+		super(1);
 		this.question = question;
 		this.uUser = uUser;
 		this.options = options;
+		this.correctAns = correctAns;
 	}
-
-
-	@Override
-	public String toString() {
-		String res = "Checkbox [id=" + id + "question=" + question + "options=";
-		for(String opt : options ) {
-			res += opt + ",";
-		}
-		res += "id=" + id;
-		return res;
-	}
-	
-	
 }	
 	

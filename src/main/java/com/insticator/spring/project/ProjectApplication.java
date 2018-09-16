@@ -10,7 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.insticator.spring.project.models.questions.Checkbox;
+import com.insticator.spring.project.models.questions.Checkbox.Checkbox;
 import com.insticator.spring.project.models.user.User;
 import com.insticator.spring.project.repository.CheckboxRepository;
 import com.insticator.spring.project.repository.UserRepository;

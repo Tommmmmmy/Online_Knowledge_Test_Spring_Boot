@@ -1,4 +1,4 @@
-package com.insticator.spring.project.models.questions;
+package com.insticator.spring.project.models.questions.Checkbox;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.insticator.spring.project.models.questions.QuestionNotFoundException;
 import com.insticator.spring.project.models.user.User;
 import com.insticator.spring.project.models.user.UserNotFoundException;
 import com.insticator.spring.project.repository.CheckboxRepository;

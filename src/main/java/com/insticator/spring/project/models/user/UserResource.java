@@ -17,12 +17,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.insticator.spring.project.models.questions.Checkans;
-import com.insticator.spring.project.models.questions.CheckansId;
-import com.insticator.spring.project.models.questions.Checkbox;
 import com.insticator.spring.project.models.questions.QuestionNotFoundException;
+import com.insticator.spring.project.models.questions.Checkbox.Checkans;
+import com.insticator.spring.project.models.questions.Checkbox.CheckansId;
+import com.insticator.spring.project.models.questions.Checkbox.Checkbox;
+import com.insticator.spring.project.models.questions.Trivia.Trivia;
+import com.insticator.spring.project.models.questions.Trivia.Triviaans;
+import com.insticator.spring.project.models.questions.Trivia.TriviaansId;
 import com.insticator.spring.project.repository.CheckansRepository;
 import com.insticator.spring.project.repository.CheckboxRepository;
+import com.insticator.spring.project.repository.TriviaRepository;
+import com.insticator.spring.project.repository.TriviaansRepository;
 import com.insticator.spring.project.repository.UserRepository;
 
 @RestController
@@ -36,6 +41,12 @@ public class UserResource {
 
 	@Autowired
 	private CheckansRepository checkansService;
+	
+	@Autowired
+	private TriviaRepository triviaService;
+	
+	@Autowired
+	private TriviaansRepository triviaansService;
 	
 	@GetMapping("/users")
 	public List<User> retrieveAllUsers() {
@@ -98,11 +109,11 @@ public class UserResource {
 		
 		CheckansId id = new CheckansId(uId, qId);
 		
-		Set<String> res = checkansService.findById(id).get().getAnswers();
-		if(res.size() == 0) {
-			throw new QuestionNotFoundException("No answer found for UserId: " + uId + "CheckId: " + qId);
+		Optional<Checkans> ans = checkansService.findById(id);
+		if(!ans.isPresent()) {
+			throw new QuestionNotFoundException("No answer found for UserId: " + uId + ", CheckId: " + qId);
 		}
-		return res;
+		return ans.get().getAnswers();
 	}
 	
 	@GetMapping("/users/{uId}/checkboxs")
@@ -125,6 +136,82 @@ public class UserResource {
 		}
 		if(res.size() == 0) {
 			throw new QuestionNotFoundException("No checkbox found for UserId: " + uId + " or all were answered");
+		}
+		return res;
+	}
+	
+	//mapping for trivias
+	@PostMapping("/users/{uId}/trivias/{qId}")
+	public void saveTriviaAnswers(@Valid @RequestBody Map<String, String> trivaans, @PathVariable int uId, @PathVariable int qId) {
+		
+		Optional<User> userOptional = service.findById(uId);
+
+		if (!userOptional.isPresent()) {
+			throw new UserNotFoundException("id-"+uId);
+		}
+		
+		List<Trivia> trivias = triviaService.findByUUserAndId(userOptional.get(), qId);
+		
+		if (trivias.size() == 0) {
+			throw new QuestionNotFoundException("UserId: " + uId + "CheckId: " + qId);
+		}
+		
+		Trivia trivia = trivias.iterator().next();
+		
+		String correctAnswer= trivaans.get("answers"); 
+		
+		TriviaansId id = new TriviaansId(uId, qId);
+		
+		Triviaans answer = new Triviaans(id, trivia, userOptional.get(), correctAnswer);
+		triviaansService.save(answer);
+	}
+	
+	@GetMapping("/users/{uId}/trivias/{qId}")
+	public String saveTriviaAnswers(@PathVariable int uId, @PathVariable int qId) {
+		
+		Optional<User> userOptional = service.findById(uId);
+
+		if (!userOptional.isPresent()) {
+			throw new UserNotFoundException("id-"+uId);
+		}
+		
+		List<Trivia> trivias = triviaService.findByUUserAndId(userOptional.get(), qId);
+		
+		if (trivias.size() == 0) {
+			throw new QuestionNotFoundException("UserId: " + uId + "CheckId: " + qId);
+		}
+		
+		Trivia trivia = trivias.iterator().next();
+		
+		TriviaansId id = new TriviaansId(uId, qId);
+		
+		Optional<Triviaans> ans = triviaansService.findById(id);
+		if(!ans.isPresent()) {
+			throw new QuestionNotFoundException("No answer found for UserId: " + uId + ", TriviaId: " + qId);
+		}
+		return ans.get().getAnswer();
+	}
+	
+	@GetMapping("/users/{uId}/trivias")
+	public List<String> checkTrivias(@PathVariable int uId) {
+		
+		Optional<User> userOptional = service.findById(uId);
+
+		if (!userOptional.isPresent()) {
+			throw new UserNotFoundException("id-"+uId);
+		}
+		
+		Set<Trivia> trivias = userOptional.get().gettQuestions();
+		List<String> res = new ArrayList<>();
+		for(Trivia trivia : trivias) {
+			TriviaansId id = new TriviaansId(uId, trivia.getId());
+			Optional<Triviaans> ans = triviaansService.findById(id);
+			if(!ans.isPresent()) {
+				res.add(trivia.getQuestion());
+			}
+		}
+		if(res.size() == 0) {
+			throw new QuestionNotFoundException("No trivia found for UserId: " + uId + " or all were answered");
 		}
 		return res;
 	}
