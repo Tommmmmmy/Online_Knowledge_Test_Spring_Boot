@@ -39,18 +39,13 @@ public class Checkbox extends Question{
     @CollectionTable(name = "checkbox_option", joinColumns = @JoinColumn(name = "checkbox_id"))
     @Column(name = "options")
 	private Set<String> options;
-	
-	@OneToMany(mappedBy = "checkBox", cascade = CascadeType.ALL)
-	@JsonIgnore
-	private Set<Checkans> answers;
 
 	public Checkbox() {
 		super(3);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-    public User getuUser() {
+
+	public User getuUser() {
 		return uUser;
 	}
 

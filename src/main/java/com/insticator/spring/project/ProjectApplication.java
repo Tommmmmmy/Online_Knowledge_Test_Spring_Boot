@@ -31,8 +31,10 @@ public class ProjectApplication implements CommandLineRunner {
 	@Transactional
 	@Override
     public void run(String... args) throws Exception {
-        User user = new User("Tommy");
-        userRepository.save(user);
+        User user1 = new User("Tommy");
+        userRepository.save(user1);
+        User user2 = new User("Tang");
+        userRepository.save(user2);
         Set<String> options = new HashSet<>();
         options.add("Red");
         options.add("Blue");
@@ -40,11 +42,16 @@ public class ProjectApplication implements CommandLineRunner {
         options.add("Green");
         options.add("Black");
         options.add("Purple");
-        Checkbox check1 = new Checkbox("What are the colors do you like?", user, options);
+        Checkbox check1 = new Checkbox("What are the colors do you like?", user1, options);
         Set<Checkbox> questionSet = new HashSet<>();
         questionSet.add(check1);
-        user.setcQuestions(questionSet);
+        user1.setcQuestions(questionSet);
         checkboxRepository.save(check1);
+        Checkbox check2 = new Checkbox("What are the colors do you like?", user2, options);
+        questionSet = new HashSet<>();
+        questionSet.add(check2);
+        user2.setcQuestions(questionSet);
+        checkboxRepository.save(check2);
         for(Checkbox checkbox : checkboxRepository.findAll()) {
         	System.out.println(checkbox.toString());
         }
