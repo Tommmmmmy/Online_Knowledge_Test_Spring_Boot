@@ -1,6 +1,8 @@
 package com.insticator.spring.project.models.questions.Checkbox;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,7 +32,7 @@ public class CheckboxResource {
 	}
 	
 	@GetMapping("/checkboxs/{id}")
-	public Checkbox retrieveUser(@PathVariable int id) {
+	public Map<String, Set<String>> retrieveUser(@PathVariable int id) {
 		
 		Optional<Checkbox> checkbox = service.findById(id);
 
@@ -38,7 +40,10 @@ public class CheckboxResource {
 			throw new QuestionNotFoundException("id-"+id);
 		}
 		
-		return checkbox.get();
+		Map<String, Set<String>> map = new HashMap<>();
+		
+		map.put(checkbox.get().getQuestion(), checkbox.get().getOptions());
+		return map;
 	}
 	
 	@GetMapping("/checkboxs/{id}/options")

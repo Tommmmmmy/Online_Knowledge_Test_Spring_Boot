@@ -1,6 +1,8 @@
 package com.insticator.spring.project.models.questions.Poll;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,12 +22,23 @@ public class PollResource {
 	private PollRepository service;
 	
 	@GetMapping("/polls")
-	public List<Poll> retrieveAllUsers() {
-		return service.findAll();
+	public Map<String, Set<String>> retrieveAllUsers() {
+		List<Poll> polls = service.findAll();
+		
+		if (polls.size() == 0) {
+			throw new QuestionNotFoundException("polls");
+		}
+		
+		Map<String, Set<String>> map = new HashMap<>();
+		
+		for(Poll poll : polls) {
+			map.put(poll.getQuestion(), poll.getOptions());
+		}
+		return map;
 	}
 	
 	@GetMapping("/polls/{id}")
-	public Poll retrieveUser(@PathVariable int id) {
+	public Map<String, Set<String>> retrieveUser(@PathVariable int id) {
 		
 		Optional<Poll> poll = service.findById(id);
 
@@ -33,7 +46,10 @@ public class PollResource {
 			throw new QuestionNotFoundException("id-"+id);
 		}
 		
-		return poll.get();
+		Map<String, Set<String>> map = new HashMap<>();
+		
+		map.put(poll.get().getQuestion(), poll.get().getOptions());
+		return map;
 	}
 	
 	@GetMapping("/polls/{id}/options")

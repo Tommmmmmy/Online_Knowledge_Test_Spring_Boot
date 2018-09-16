@@ -29,9 +29,6 @@ public class Pollans {
     @JoinColumn(name="user_id", insertable=false, updatable=false)
 	private User user;
 	
-	@ElementCollection
-    @CollectionTable(name = "user_poll_answers", joinColumns = {@JoinColumn(name = "poll_id"), @JoinColumn(name = "user_id")})
-    @Column
 	private String answer;
 
 	public PollansId getId() {

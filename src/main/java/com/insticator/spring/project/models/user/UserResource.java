@@ -2,6 +2,7 @@ package com.insticator.spring.project.models.user;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +28,13 @@ import com.insticator.spring.project.models.questions.Poll.PollansId;
 import com.insticator.spring.project.models.questions.Trivia.Trivia;
 import com.insticator.spring.project.models.questions.Trivia.Triviaans;
 import com.insticator.spring.project.models.questions.Trivia.TriviaansId;
+import com.insticator.spring.project.models.questions.matrix.Matrix;
+import com.insticator.spring.project.models.questions.matrix.Matrixans;
+import com.insticator.spring.project.models.questions.matrix.MatrixansId;
 import com.insticator.spring.project.repository.CheckansRepository;
 import com.insticator.spring.project.repository.CheckboxRepository;
+import com.insticator.spring.project.repository.MatrixRepository;
+import com.insticator.spring.project.repository.MatrixansRepository;
 import com.insticator.spring.project.repository.PollRepository;
 import com.insticator.spring.project.repository.PollansRepository;
 import com.insticator.spring.project.repository.TriviaRepository;
@@ -59,6 +65,12 @@ public class UserResource {
 	@Autowired
 	private PollansRepository pollansService;
 	
+	@Autowired
+	private MatrixRepository matrixService;
+	
+	@Autowired
+	private MatrixansRepository matrixansService;
+	
 	@GetMapping("/users")
 	public List<User> retrieveAllUsers() {
 		return service.findAll();
@@ -74,6 +86,83 @@ public class UserResource {
 		}
 		
 		return user.get();
+	}
+	
+	@GetMapping("/users/{id}/questions")
+	public Map<String, Set<String>> retrieveAllQuestions(@PathVariable int id) {
+		
+		Optional<User> user = service.findById(id);
+
+		if (!user.isPresent()) {
+			throw new UserNotFoundException("id-"+id);
+		}
+		
+		Map<String, Set<String>> res = new HashMap<>();
+		
+		Set<Trivia> tQuestions = user.get().gettQuestions();
+		Set<Poll> pQuestions = user.get().getpQuestions();
+		Set<Matrix> mQuestions = user.get().getmQuestions();
+		Set<Checkbox> cQuestions = user.get().getcQuestions();
+		
+		if(tQuestions.size() > 0) {
+			for(Trivia trivia : tQuestions) {
+				TriviaansId qid = new TriviaansId(id, trivia.getId());
+				Optional<Triviaans> ans = triviaansService.findById(qid);
+				if(!ans.isPresent()) {
+					res.put("Trivia " + trivia.getId() + " " + trivia.getQuestion(), trivia.getOptions());
+				}
+			}
+		}
+		
+		if(pQuestions.size() > 0) {
+			for(Poll poll : pQuestions) {
+				PollansId qid = new PollansId(id, poll.getId());
+				Optional<Pollans> ans = pollansService.findById(qid);
+				if(!ans.isPresent()) {
+					res.put("Poll " + poll.getId() + " " + poll.getQuestion(), poll.getOptions());
+				}
+			}
+		}
+		
+		if(mQuestions.size() > 0) {
+			for(Matrix matrix : mQuestions) {
+				MatrixansId qid = new MatrixansId(id, matrix.getId());
+				Optional<Matrixans> ans = matrixansService.findById(qid);
+				if(ans.isPresent()) {
+					continue;
+				}
+				Set<String> list = new HashSet<>();
+				int count = 0;
+				StringBuilder str = new StringBuilder();
+				for(String option : matrix.getOptions1()) {
+					str.append(option);
+					if(count != matrix.getOptions1().size() - 1) str.append(",");
+					count++;
+				}
+				list.add(str.toString());
+				count = 0;
+				str = new StringBuilder();
+				for(String option : matrix.getOptions2()) {
+					str.append(option);
+					if(count != matrix.getOptions2().size() - 1) str.append(",");
+					count++;
+				}
+				list.add(str.toString());
+				res.put("matrix " + matrix.getId(), list);
+			}
+		}
+		
+		if(cQuestions.size() > 0) {
+			for(Checkbox checkbox : cQuestions) {
+				CheckansId qid = new CheckansId(id, checkbox.getId());
+				Optional<Checkans> ans = checkansService.findById(qid);
+				if(!ans.isPresent()) {
+					res.put("Checkbox " + checkbox.getId() + " " + checkbox.getQuestion(), checkbox.getOptions());
+				}
+			}
+		}
+		
+		return res;
 	}
 	
 	@PostMapping("/users/{uId}/checkboxs/{qId}")
@@ -306,6 +395,84 @@ public class UserResource {
 		}
 		if(res.size() == 0) {
 			throw new QuestionNotFoundException("No poll found for UserId: " + uId + " or all were answered");
+		}
+		return res;
+	}
+	
+	//mapping for matrix
+	@PostMapping("/users/{uId}/matrixs/{qId}")
+	public void saveMatrixAnswers(@Valid @RequestBody List<String> matrixans, @PathVariable int uId, @PathVariable int qId) {
+		
+		Optional<User> userOptional = service.findById(uId);
+
+		if (!userOptional.isPresent()) {
+			throw new UserNotFoundException("id-"+uId);
+		}
+		
+		List<Matrix> matrixs = matrixService.findByUUserAndId(userOptional.get(), qId);
+		
+		if (matrixs.size() == 0) {
+			throw new QuestionNotFoundException("UserId: " + uId + "MatrixId: " + qId);
+		}
+		
+		Matrix matrix = matrixs.iterator().next();
+		
+		MatrixansId id = new MatrixansId(uId, qId);
+		
+		Matrixans answer = new Matrixans(id, matrix, userOptional.get(), matrixans.get(0), matrixans.get(1));
+		matrixansService.save(answer);
+	}
+	
+	@GetMapping("/users/{uId}/matrixs/{qId}")
+	public List<String> saveMatrixAnswers(@PathVariable int uId, @PathVariable int qId) {
+		
+		Optional<User> userOptional = service.findById(uId);
+
+		if (!userOptional.isPresent()) {
+			throw new UserNotFoundException("id-"+uId);
+		}
+		
+		List<Matrix> matrixs = matrixService.findByUUserAndId(userOptional.get(), qId);
+		
+		if (matrixs.size() == 0) {
+			throw new QuestionNotFoundException("UserId: " + uId + "MatrixId: " + qId);
+		}
+		
+		Matrix matrix = matrixs.iterator().next();
+		
+		MatrixansId id = new MatrixansId(uId, qId);
+		
+		Optional<Matrixans> ans = matrixansService.findById(id);
+		if(!ans.isPresent()) {
+			throw new QuestionNotFoundException("No answer found for UserId: " + uId + ", MatrixId: " + qId);
+		}
+		List<String> res = new ArrayList<>();
+		res.add(ans.get().getAnswer1());
+		res.add(ans.get().getAnswer2());
+		return res;
+	}
+	
+	@GetMapping("/users/{uId}/matrixs")
+	public List<Set<String>> checkMatrixs(@PathVariable int uId) {
+		
+		Optional<User> userOptional = service.findById(uId);
+
+		if (!userOptional.isPresent()) {
+			throw new UserNotFoundException("id-"+uId);
+		}
+		
+		Set<Matrix> matrixs = userOptional.get().getmQuestions();
+		List<Set<String>> res = new ArrayList<>();
+		for(Matrix matrix : matrixs) {
+			MatrixansId id = new MatrixansId(uId, matrix.getId());
+			Optional<Matrixans> ans = matrixansService.findById(id);
+			if(!ans.isPresent()) {
+				res.add(matrix.getOptions1());
+				res.add(matrix.getOptions2());
+			}
+		}
+		if(res.size() == 0) {
+			throw new QuestionNotFoundException("No matrix found for UserId: " + uId + " or all were answered");
 		}
 		return res;
 	}

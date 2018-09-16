@@ -25,9 +25,6 @@ public class Triviaans {
     @JoinColumn(name="user_id", insertable=false, updatable=false)
 	private User user;
 	
-	@ElementCollection
-    @CollectionTable(name = "user_trivia_answers", joinColumns = {@JoinColumn(name = "trivia_id"), @JoinColumn(name = "user_id")})
-    @Column
 	private String answer;
 
 	public TriviaansId getId() {

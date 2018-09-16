@@ -23,6 +23,7 @@ import com.insticator.spring.project.models.questions.Question;
 import com.insticator.spring.project.models.questions.Checkbox.Checkbox;
 import com.insticator.spring.project.models.questions.Poll.Poll;
 import com.insticator.spring.project.models.questions.Trivia.Trivia;
+import com.insticator.spring.project.models.questions.matrix.Matrix;
 
 @Entity
 @Table(name = "users")
@@ -47,6 +48,10 @@ public class User implements Serializable{
 	@OneToMany(mappedBy = "uUser", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Poll> pQuestions;
+	
+	@OneToMany(mappedBy = "uUser", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Matrix> mQuestions;
 
 	public Integer getId() {
 		return id;
@@ -88,6 +93,14 @@ public class User implements Serializable{
 		this.pQuestions = pQuestions;
 	}
 	
+	public Set<Matrix> getmQuestions() {
+		return mQuestions;
+	}
+
+	public void setmQuestions(Set<Matrix> mQuestions) {
+		this.mQuestions = mQuestions;
+	}
+
 	public User() {
 		
 	}
@@ -96,12 +109,12 @@ public class User implements Serializable{
 		this.name = name;
 	}
 
-	public User(int id, String name, Set<Trivia> tQuestions, Set<Checkbox> cQuestions, Set<Poll> pQuestions) {
-		this.id = id;
+	public User(String name, Set<Trivia> tQuestions, Set<Checkbox> cQuestions, Set<Poll> pQuestions, Set<Matrix> mQuestions) {
 		this.name = name;
 		this.tQuestions = tQuestions;
 		this.cQuestions = cQuestions;
 		this.pQuestions = pQuestions;
+		this.mQuestions = mQuestions;
 	}
 	
 	

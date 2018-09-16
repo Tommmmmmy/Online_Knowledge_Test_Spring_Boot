@@ -34,7 +34,7 @@ public class Trivia extends Question{
 	private User uUser;
 	
 	@ElementCollection
-    @CollectionTable(name = "question_option", joinColumns = @JoinColumn(name = "trivia_id"))
+    @CollectionTable(name = "trivia_option", joinColumns = @JoinColumn(name = "trivia_id"))
     @Column(name = "options")
 	private Set<String> options;
 

@@ -34,7 +34,7 @@ public class Poll extends Question{
 	private User uUser;
 	
 	@ElementCollection
-    @CollectionTable(name = "question_option", joinColumns = @JoinColumn(name = "poll_id"))
+    @CollectionTable(name = "poll_option", joinColumns = @JoinColumn(name = "poll_id"))
     @Column(name = "options")
 	private Set<String> options;
 
