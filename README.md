@@ -17,16 +17,16 @@ Also, we have different answer and its composite embeddable id tables for each t
 <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603056-1201c780-b9f6-11e8-9d10-4df301211ab4.png" /><br>
 ## Routers<br>
 The application has many routers for users, questions, and questions under a user. <br>
-#### The routers for a user include: <br>
+The routers for a user include: <br>
 ##### @GetMapping("/users"): Retrieve all users in the application<br>
 ##### @GetMapping("/users/{id}"): Retrieve a user using the id<br>
 ##### @GetMapping("/users/{id}/questions"): Retrieve all questions of four types under a user’s profile<br>
-#### The routers for questions under a user. Take the example of checkbox type<br>
+The routers for questions under a user. Take the example of checkbox type<br>
 ##### @PostMapping("/users/{uId}/checkboxs/{qId}"): Save a user’s answers for a checkbox question<br>
 ##### @GetMapping("/users/{uId}/checkboxs/{qId}"): Get a user’s answers for a checkbox question<br>
 ##### @GetMapping("/users/{uId}/checkboxs"): Get a user’s all checkbox questions<br>
-#### The routers for questions in general:<br>
-##### Take the example of matrix type:<br>
+The routers for questions in general:<br>
+Take the example of matrix type:<br>
 ##### @GetMapping("/matrixs"): Retrieve all matrix questions in the whole application<br>
 ##### @GetMapping("/matrixs/{id}"): Retrieve a matrix question using the id<br>
 ##### @GetMapping("/matrixs/{id}/options"): Retrieve a matrix question’s all options using the id<br>
