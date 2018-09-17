@@ -36,7 +36,7 @@ TriviaansId:
  
 Routers
 The application has many routers for users, questions, and questions under a user. 
-The routers for a user include:
+The routers for a user include: 
 @GetMapping("/users"): Retrieve all users in the application
 @GetMapping("/users/{id}"): Retrieve a user using the id
 @GetMapping("/users/{id}/questions"): Retrieve all questions of four types under a user’s profile
