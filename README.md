@@ -49,6 +49,8 @@ Now, let’s look at how trivia looks like. Let’s say the user chose an answer
 
 If the answer is correct, then it will give a message ‘Correct Answer!’. Otherwise, it should be ‘Wrong Answer!’.<br>
  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603137-f0551000-b9f6-11e8-9285-fed914cc1531.png" /><br>
+  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45604421-3ebbdc00-ba02-11e8-8101-e87950256ce6.png" /><br>
+ 
 The user can also look at the answer saved in the database.<br>
  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603140-f8ad4b00-b9f6-11e8-89ad-c9eb21ed1c56.png" /><br>
 Now the trivia question is no longer in the user’s profile.<br>
