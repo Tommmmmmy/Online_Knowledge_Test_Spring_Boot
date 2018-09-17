@@ -1,4 +1,4 @@
-# insticator_project
+# insticator_project By Maoming Tang
 ## Data Structures<br>
 ### User:<br>
 <img height="300" width="500" src="https://user-images.githubusercontent.com/16629900/45603018-91db6200-b9f5-11e8-8ebb-07375e863c26.png" /><br>
