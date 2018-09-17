@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.insticator.spring.project.models.questions.QuestionNotFoundException;
+import com.insticator.spring.project.models.questions.Poll.Poll;
 import com.insticator.spring.project.models.user.User;
 import com.insticator.spring.project.models.user.UserNotFoundException;
 import com.insticator.spring.project.repository.CheckboxRepository;
@@ -27,12 +28,23 @@ public class CheckboxResource {
 	private CheckboxRepository service;
 	
 	@GetMapping("/checkboxs")
-	public List<Checkbox> retrieveAllUsers() {
-		return service.findAll();
+	public Map<String, Set<String>> retrieveAllCheckboxs() {
+		List<Checkbox> checkboxs = service.findAll();
+		
+		if (checkboxs.size() == 0) {
+			throw new QuestionNotFoundException("checkbox");
+		}
+		
+		Map<String, Set<String>> map = new HashMap<>();
+		
+		for(Checkbox checkbox : checkboxs) {
+			map.put(checkbox.getQuestion(), checkbox.getOptions());
+		}
+		return map;
 	}
 	
 	@GetMapping("/checkboxs/{id}")
-	public Map<String, Set<String>> retrieveUser(@PathVariable int id) {
+	public Map<String, Set<String>> retrieveCheckbox(@PathVariable int id) {
 		
 		Optional<Checkbox> checkbox = service.findById(id);
 

@@ -1,6 +1,8 @@
 package com.insticator.spring.project.models.questions.Trivia;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.insticator.spring.project.models.questions.QuestionNotFoundException;
+import com.insticator.spring.project.models.questions.Poll.Poll;
 import com.insticator.spring.project.repository.TriviaRepository;
 
 @RestController
@@ -19,12 +22,23 @@ public class TriviaResource {
 	TriviaRepository service;
 	
 	@GetMapping("/trivias")
-	public List<Trivia> retrieveAllUsers() {
-		return service.findAll();
+	public Map<String, Set<String>> retrieveAllTrivia() {
+		List<Trivia> trivias = service.findAll();
+		
+		if (trivias.size() == 0) {
+			throw new QuestionNotFoundException("trivia");
+		}
+		
+		Map<String, Set<String>> map = new HashMap<>();
+		
+		for(Trivia trivia : trivias) {
+			map.put(trivia.getQuestion(), trivia.getOptions());
+		}
+		return map;
 	}
 	
 	@GetMapping("/trivias/{id}")
-	public Trivia retrieveUser(@PathVariable int id) {
+	public Map<String, Set<String>> retrieveTrivia(@PathVariable int id) {
 		
 		Optional<Trivia> trivia = service.findById(id);
 
@@ -32,7 +46,11 @@ public class TriviaResource {
 			throw new QuestionNotFoundException("id-"+id);
 		}
 		
-		return trivia.get();
+		Map<String, Set<String>> map = new HashMap<>();
+		
+		map.put(trivia.get().getQuestion(), trivia.get().getOptions());
+		
+		return map;
 	}
 	
 	@GetMapping("/trivias/{id}/options")

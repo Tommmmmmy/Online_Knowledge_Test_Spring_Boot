@@ -22,11 +22,11 @@ public class PollResource {
 	private PollRepository service;
 	
 	@GetMapping("/polls")
-	public Map<String, Set<String>> retrieveAllUsers() {
+	public Map<String, Set<String>> retrieveAllPolls() {
 		List<Poll> polls = service.findAll();
 		
 		if (polls.size() == 0) {
-			throw new QuestionNotFoundException("polls");
+			throw new QuestionNotFoundException("poll");
 		}
 		
 		Map<String, Set<String>> map = new HashMap<>();
@@ -38,7 +38,7 @@ public class PollResource {
 	}
 	
 	@GetMapping("/polls/{id}")
-	public Map<String, Set<String>> retrieveUser(@PathVariable int id) {
+	public Map<String, Set<String>> retrievePoll(@PathVariable int id) {
 		
 		Optional<Poll> poll = service.findById(id);
 

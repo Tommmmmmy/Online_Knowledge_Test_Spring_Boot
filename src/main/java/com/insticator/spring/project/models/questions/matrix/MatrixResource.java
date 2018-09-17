@@ -24,14 +24,20 @@ public class MatrixResource {
 	private MatrixRepository service;
 	
 	@GetMapping("/matrixs")
-	public Set<Matrix> retrieveAllUsers() {
-		Set<Matrix> set = new HashSet<>();
-		set.addAll(service.findAll());
-		return set;
+	public Set<Set<String>> retrieveAllMatrix() {
+		Set<Set<String>> res = new HashSet<>();
+		List<Matrix> list = service.findAll();
+		if (list.size() == 0) {
+			throw new QuestionNotFoundException("matrix");
+		}
+		for(Matrix matrix : list) {
+			res.add(retrieveMatrix(matrix.getId()));
+		}
+		return res;
 	}
 	
 	@GetMapping("/matrixs/{id}")
-	public Set<String> retrieveUser(@PathVariable int id) {
+	public Set<String> retrieveMatrix(@PathVariable int id) {
 		
 		Optional<Matrix> matrixOptional = service.findById(id);
 
