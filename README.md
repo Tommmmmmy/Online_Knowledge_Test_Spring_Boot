@@ -47,8 +47,9 @@ However, you can still find the checkbox question in the question router.<br>
 Now, let’s look at how trivia looks like. Let’s say the user chose an answer for a trivia question and it is send to the back end.<br>
  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603134-e6cba800-b9f6-11e8-85e4-ee86e10e1c62.png" /><br>
 
-If the answer is correct, then it will give a message ‘Correct Answer!’. Otherwise, it should be ‘Wrong Answer!’.<br>
+If the answer is correct, then it will give a message ‘Correct Answer!’. <br>
  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603137-f0551000-b9f6-11e8-9285-fed914cc1531.png" /><br>
+ Otherwise, it should be ‘Wrong Answer!’.<br>
   <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45604421-3ebbdc00-ba02-11e8-8101-e87950256ce6.png" /><br>
  
 The user can also look at the answer saved in the database.<br>
