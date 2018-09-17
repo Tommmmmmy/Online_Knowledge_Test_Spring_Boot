@@ -1,38 +1,37 @@
 # insticator_project
-Data Structures<br>
-User:<br>
+## Data Structures<br>
+### User:<br>
 <img height="300" width="500" src="https://user-images.githubusercontent.com/16629900/45603018-91db6200-b9f5-11e8-8ebb-07375e863c26.png" /><br>
-Trivia:<br>
+### Trivia:<br>
 <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603024-acadd680-b9f5-11e8-8fd4-afc2d2127246.png" /><br>
-Poll:<br>
+### Poll:<br>
 <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603037-c64f1e00-b9f5-11e8-8d17-63a7b5a383e6.png" /><br>
-Checkbox:<br>
+### Checkbox:<br>
 <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603041-d49d3a00-b9f5-11e8-8d98-7282eeaf6ab7.png" /><br>
 
-Matrix:<br>
+### Matrix:<br>
 <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603046-e088fc00-b9f5-11e8-8e24-2efdeab47805.png" /><br>
 Also, we have different answer and its composite embeddable id tables for each type of question. Take a example of Trivia:<br>
 <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603051-044c4200-b9f6-11e8-9d43-cf269b79741a.png" /><br>
-TriviaansId:<br>
+### TriviaansId:<br>
 <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603056-1201c780-b9f6-11e8-9d10-4df301211ab4.png" /><br>
-Routers<br>
+## Routers<br>
 The application has many routers for users, questions, and questions under a user. <br>
-The routers for a user include: <br>
-@GetMapping("/users"): Retrieve all users in the application<br>
-@GetMapping("/users/{id}"): Retrieve a user using the id<br>
-@GetMapping("/users/{id}/questions"): Retrieve all questions of four types under a user’s profile<br>
-The routers for questions under a user. Take the example of checkbox type<br>
-@PostMapping("/users/{uId}/checkboxs/{qId}"): Save a user’s answers for a checkbox question<br>
-@GetMapping("/users/{uId}/checkboxs/{qId}"): Get a user’s answers for a checkbox question<br>
-@GetMapping("/users/{uId}/checkboxs"): Get a user’s all checkbox questions<br>
-The routers for questions in general:<br>
-Take the example of matrix type:<br>
-@GetMapping("/matrixs"): Retrieve all matrix questions in the whole application<br>
-@GetMapping("/matrixs/{id}"): Retrieve a matrix question using the id<br>
-@GetMapping("/matrixs/{id}/options"): Retrieve a matrix question’s all options using the id<br>
+#### The routers for a user include: <br>
+##### @GetMapping("/users"): Retrieve all users in the application<br>
+##### @GetMapping("/users/{id}"): Retrieve a user using the id<br>
+##### @GetMapping("/users/{id}/questions"): Retrieve all questions of four types under a user’s profile<br>
+#### The routers for questions under a user. Take the example of checkbox type<br>
+##### @PostMapping("/users/{uId}/checkboxs/{qId}"): Save a user’s answers for a checkbox question<br>
+##### @GetMapping("/users/{uId}/checkboxs/{qId}"): Get a user’s answers for a checkbox question<br>
+##### @GetMapping("/users/{uId}/checkboxs"): Get a user’s all checkbox questions<br>
+#### The routers for questions in general:<br>
+##### Take the example of matrix type:<br>
+##### @GetMapping("/matrixs"): Retrieve all matrix questions in the whole application<br>
+##### @GetMapping("/matrixs/{id}"): Retrieve a matrix question using the id<br>
+##### @GetMapping("/matrixs/{id}/options"): Retrieve a matrix question’s all options using the id<br>
 
-Screenshots of states<br>
-(including the required web service API)<br>
+## Screenshots of states (including the required web service API)<br>
 A user with id 1 named Tommy is created in the main function. Four questions with each one being each type are added to the user’s profile.<br>
 <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603063-23e36a80-b9f6-11e8-959a-fe7c9c61b5be.png" /><br>
 Now, if a question is answered, which in the case is a checkbox one, it will not show in the user’s question list anymore.<br>
@@ -47,7 +46,6 @@ However, you can still find the checkbox question in the question router.<br>
  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603132-dfa49a00-b9f6-11e8-9549-27921ecce2c2.png" /><br>
 Now, let’s look at how trivia looks like. Let’s say the user chose an answer for a trivia question and it is send to the back end.<br>
  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603134-e6cba800-b9f6-11e8-85e4-ee86e10e1c62.png" /><br>
-
 
 If the answer is correct, then it will give a message ‘Correct Answer!’. Otherwise, it should be ‘Wrong Answer!’.<br>
  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603137-f0551000-b9f6-11e8-9285-fed914cc1531.png" /><br>
@@ -64,11 +62,11 @@ Now, the front end sends the chosen cell of that matrix question to the back end
  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603157-1f6b8180-b9f7-11e8-885f-00963fc190a7.png" /><br>
  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603162-2d210700-b9f7-11e8-8de1-0ada5fedf8d9.png" /><br>
 
-Remarks<br>
-1. To run this application, you should first create a database named ‘insticator’ with the MySQL port number ‘3306’.<br>
-2. To improve the matrix type to including the ‘Age/Gender message, we should change the type of options from Set<String> to Map<String, Set<String>> with the keys in the map are ‘Age’ and ‘Gender’. The values are corresponding options, for example, for the key ‘Gender’, the value is a string set containing ‘Male’ and ‘Female’.<br>
+## Remarks<br>
+### 1. To run this application, you should first create a database named ‘insticator’ with the MySQL port number ‘3306’.<br>
+### 2. To improve the matrix type to including the ‘Age/Gender message, we should change the type of options from Set<String> to Map<String, Set<String>> with the keys in the map are ‘Age’ and ‘Gender’. The values are corresponding options, for example, for the key ‘Gender’, the value is a string set containing ‘Male’ and ‘Female’.<br>
  <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603165-35794200-b9f7-11e8-9d54-4bb86ec5ef5f.png" /><br>
-3. Please elaborate how to make this request scalable when there are millions of questions and millision of visitors.<br>
+### 3. Please elaborate how to make this request scalable when there are millions of questions and millision of visitors.<br>
 The screenshots of this API were shown in the ‘screenshots’ section. <br>
 (1) We can use a load balancer Ribbon to direct requests to any available servers to make the requests handled in time.<br>
 (2) Optimize the configuration of the servers. For example, number of threads. Of course, we need to think in detail about problems like synchronization and race condition in the concurrent and multi-thread programming.<br>
