@@ -1,7 +1,7 @@
 # insticator_project
 Data Structures<br>
 User:<br>
-<img height="400" width="300" src="https://user-images.githubusercontent.com/16629900/45602923-a0754980-b9f4-11e8-8667-1354bcc15a4a.png" /> 
+<img height="400" width="700" src="https://user-images.githubusercontent.com/16629900/45602923-a0754980-b9f4-11e8-8667-1354bcc15a4a.png" /> 
 Trivia:<br>
  
 
