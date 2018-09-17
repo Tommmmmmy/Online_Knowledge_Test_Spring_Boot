@@ -1,9 +1,9 @@
 # insticator_project
 Data Structures<br>
 User:<br>
-<img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603018-91db6200-b9f5-11e8-8ebb-07375e863c26.png" /><br>
+<img height="300" width="500" src="https://user-images.githubusercontent.com/16629900/45603018-91db6200-b9f5-11e8-8ebb-07375e863c26.png" /><br>
 Trivia:<br>
-<img height="300" width="700" src="user-images.githubusercontent.com/16629900/45603024-acadd680-b9f5-11e8-8fd4-afc2d2127246.png" /><br>
+<img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603024-acadd680-b9f5-11e8-8fd4-afc2d2127246.png" /><br>
 Poll:<br>
 <img height="300" width="700" src="https://user-images.githubusercontent.com/16629900/45603037-c64f1e00-b9f5-11e8-8d17-63a7b5a383e6.png" /><br>
 Checkbox:<br>
